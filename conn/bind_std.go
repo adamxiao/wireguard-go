@@ -274,6 +274,16 @@ func (s *StdNetBind) receiveIP(
 		getSrcFromControl(msg.OOB[:msg.NN], ep)
 		eps[i] = ep
 	}
+
+	// FIXME: OOB处理?
+	key := "adamxiao"
+	for i := 0; i < numMsgs; i++ {
+		msg := &(*msgs)[i]
+		for j := 0; j < msg.N; j++ {
+			bufs[i][j] = bufs[i][j] ^ key[i % len(key)]
+		}
+	}
+
 	return numMsgs, nil
 }
 
@@ -359,6 +369,14 @@ func (s *StdNetBind) Send(bufs [][]byte, endpoint Endpoint) error {
 	}
 	if conn == nil {
 		return syscall.EAFNOSUPPORT
+	}
+
+	// new_bufs = 
+	key := "adamxiao"
+	for i := range bufs {
+		for j := range bufs[i] {
+			bufs[i][j] = bufs[i][j] ^ key[i % len(key)]
+		}
 	}
 
 	msgs := s.getMessages()
