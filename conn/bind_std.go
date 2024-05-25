@@ -276,11 +276,11 @@ func (s *StdNetBind) receiveIP(
 	}
 
 	// FIXME: OOB处理?
-	key := "adamxiao"
+	key := "qwerasdfzxcv"
 	for i := 0; i < numMsgs; i++ {
 		msg := &(*msgs)[i]
-		for j := 0; j < msg.N; j++ {
-			bufs[i][j] = bufs[i][j] ^ key[i % len(key)]
+		for j := 0; j < msg.N && j < 30; j++ {
+			bufs[i][j] = bufs[i][j] ^ key[j % len(key)]
 		}
 	}
 
@@ -372,10 +372,10 @@ func (s *StdNetBind) Send(bufs [][]byte, endpoint Endpoint) error {
 	}
 
 	// new_bufs = 
-	key := "adamxiao"
+	key := "qwerasdfzxcv"
 	for i := range bufs {
-		for j := range bufs[i] {
-			bufs[i][j] = bufs[i][j] ^ key[i % len(key)]
+		for j := 0; j < len(bufs[i]) && j < 30; j++ {
+			bufs[i][j] = bufs[i][j] ^ key[j % len(key)]
 		}
 	}
 
